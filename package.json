@@ -1,0 +1,19 @@
+{
+  "scripts": {
+    "dev": "next --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "next": "^15.2.2",
+    "nextra": "^4.2.16",
+    "nextra-theme-docs": "^4.2.16",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "22.13.10",
+    "@types/react": "19.0.10"
+  }
+}
