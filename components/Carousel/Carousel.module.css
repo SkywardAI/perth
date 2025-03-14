@@ -1,0 +1,31 @@
+.container {
+  position: relative;
+  text-align: center;
+}
+
+.image {
+  width: 100%;
+  max-width: 800px;
+  border-radius: 8px;
+}
+
+.indicators {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 5px;
+}
+
+.indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #ccc;
+  transition: background-color 0.3s;
+}
+
+.active {
+  background-color: #007bff;
+}
