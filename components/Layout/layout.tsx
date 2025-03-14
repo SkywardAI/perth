@@ -1,244 +1,149 @@
 'use client'
 import Link from 'next/link'
 import React, { useState } from 'react'
+import styles from './Layout.module.css'
+import { Github, Linkedin, Twitter, Facebook } from 'lucide-react'
 
 export default function Layout({ children }) {
-  const [showProducts, setShowProducts] = useState(false)
-  const [showSolutions, setShowSolutions] = useState(false)
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
+
+  const handleMouseEnter = (menu: string) => setActiveDropdown(menu)
+  const handleMouseLeave = () => setActiveDropdown(null)
 
   return (
     <html lang="en">
-      <body style={{ fontFamily: 'Arial, sans-serif', color: '#333' }}>
+      <body className={styles.body}>
         {/* Header */}
-        <header
-          style={{
-            backgroundColor: '#f5f5f5',
-            borderBottom: '1px solid #ddd',
-            padding: '0.75rem 1rem',
-          }}>
-          <div
-            style={{
-              maxWidth: '1200px',
-              margin: '0 auto',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}>
+        <header className={styles.header}>
+          <div className={styles.navbar}>
             {/* Brand */}
-            <div style={{ fontWeight: 'bold', fontSize: '1.5rem' }}>
+            <div className={styles.brand}>
               <Link href="/">SkywardAI</Link>
             </div>
+
             {/* Navigation */}
-            <nav style={{ display: 'flex', alignItems: 'center' }}>
-              <div style={{ position: 'relative', marginRight: '1rem' }}>
-                <button
-                  onClick={() => setShowProducts((prev) => !prev)}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    cursor: 'pointer',
-                    fontSize: '1rem',
-                    color: 'black',
-                  }}>
-                  Products
-                </button>
-                {showProducts && (
-                  <ul
-                    style={{
-                      position: 'absolute',
-                      top: '100%',
-                      left: 0,
-                      backgroundColor: '#fff',
-                      listStyle: 'none',
-                      margin: 0,
-                      padding: '0.5rem 1rem',
-                      boxShadow: '0 2px 6px rgba(0,0,0,0.15)',
-                      zIndex: 1000,
-                    }}>
-                    <li style={{ marginBottom: '0.5rem' }}>
-                      <a
-                        href="https://github.com/SkywardAI"
-                        target="_blank"
-                        rel="noopener noreferrer">
-                        AI Powered Chatbot
-                      </a>
-                    </li>
-                    <li style={{ marginBottom: '0.5rem' }}>
-                      <a
-                        href="https://github.com/SkywardAI"
-                        target="_blank"
-                        rel="noopener noreferrer">
-                        RAG
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="https://github.com/SkywardAI"
-                        target="_blank"
-                        rel="noopener noreferrer">
-                        E-Commerce
-                      </a>
-                    </li>
+            <nav className={styles.navbarItems}>
+              {/* Products Dropdown */}
+              <div
+                className={styles.navItem}
+                onMouseEnter={() => handleMouseEnter('products')}
+                onMouseLeave={handleMouseLeave}>
+                <button className={styles.navButton}>Products</button>
+                {activeDropdown === 'products' && (
+                  <ul className={styles.dropdown}>
+                    {['AI Powered Chatbot', 'RAG', 'E-Commerce'].map((item) => (
+                      <li key={item} className={styles.dropdownItem}>
+                        <a
+                          href="https://github.com/SkywardAI"
+                          target="_blank"
+                          rel="noopener noreferrer">
+                          {item}
+                        </a>
+                      </li>
+                    ))}
                   </ul>
                 )}
               </div>
-              <div style={{ position: 'relative', marginRight: '1rem' }}>
-                <button
-                  onClick={() => setShowSolutions((prev) => !prev)}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    cursor: 'pointer',
-                    fontSize: '1rem',
-                    color: 'black',
-                  }}>
-                  Solutions
-                </button>
-                {showSolutions && (
-                  <ul
-                    style={{
-                      position: 'absolute',
-                      top: '100%',
-                      left: 0,
-                      backgroundColor: '#fff',
-                      listStyle: 'none',
-                      margin: 0,
-                      padding: '0.5rem 1rem',
-                      boxShadow: '0 2px 6px rgba(0,0,0,0.15)',
-                      zIndex: 1000,
-                    }}>
-                    <li style={{ marginBottom: '0.5rem' }}>
-                      <a
-                        href="https://github.com/SkywardAI"
-                        target="_blank"
-                        rel="noopener noreferrer">
-                        Getting Started
-                      </a>
-                    </li>
-                    <li style={{ marginBottom: '0.5rem' }}>
-                      <a
-                        href="https://github.com/SkywardAI"
-                        target="_blank"
-                        rel="noopener noreferrer">
-                        API Reference
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="https://github.com/SkywardAI"
-                        target="_blank"
-                        rel="noopener noreferrer">
-                        FAQ
-                      </a>
-                    </li>
+
+              {/* Solutions Dropdown */}
+              <div
+                className={styles.navItem}
+                onMouseEnter={() => handleMouseEnter('solutions')}
+                onMouseLeave={handleMouseLeave}>
+                <button className={styles.navButton}>Solutions</button>
+                {activeDropdown === 'solutions' && (
+                  <ul className={styles.dropdown}>
+                    {['Getting Started', 'API Reference', 'FAQ'].map((item) => (
+                      <li key={item} className={styles.dropdownItem}>
+                        <a
+                          href="https://github.com/SkywardAI"
+                          target="_blank"
+                          rel="noopener noreferrer">
+                          {item}
+                        </a>
+                      </li>
+                    ))}
                   </ul>
                 )}
               </div>
-              <div style={{ marginRight: '1rem' }}>
+
+              {/* Showcase Link */}
+              <div className={styles.navItem}>
                 <Link href="/showcase">Showcase</Link>
               </div>
             </nav>
           </div>
         </header>
 
-        <main
-          style={{
-            maxWidth: '1200px',
-            margin: '2rem auto',
-            padding: '0 1rem',
-            textAlign: 'center',
-          }}>
-          {children}
-        </main>
+        {/* Main Content */}
+        <main className={styles.main}>{children}</main>
 
         {/* Footer */}
-        <footer
-          style={{
-            backgroundColor: '#f5f5f5',
-            borderTop: '1px solid #ddd',
-            padding: '2rem 1rem',
-          }}>
-          <div
-            style={{
-              maxWidth: '1200px',
-              margin: '0 auto',
-              display: 'flex',
-              justifyContent: 'space-between',
-              flexWrap: 'wrap',
-            }}>
-            <div style={{ marginBottom: '1rem' }}>
-              <h3>Product</h3>
-              <ul style={{ listStyle: 'none', padding: 0 }}>
-                <li>
-                  <a
-                    href="https://github.com/SkywardAI"
-                    target="_blank"
-                    rel="noopener noreferrer">
-                    AI Powered Chatbot
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://github.com/SkywardAI"
-                    target="_blank"
-                    rel="noopener noreferrer">
-                    RAG
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://github.com/SkywardAI"
-                    target="_blank"
-                    rel="noopener noreferrer">
-                    E-Commerce
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <div style={{ marginBottom: '1rem' }}>
-              <h3>SOLUTIONS</h3>
-              <ul style={{ listStyle: 'none', padding: 0 }}>
-                <li>
-                  <a
-                    href="https://github.com/SkywardAI"
-                    target="_blank"
-                    rel="noopener noreferrer">
-                    Getting Started
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://github.com/SkywardAI"
-                    target="_blank"
-                    rel="noopener noreferrer">
-                    API Reference
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://github.com/SkywardAI"
-                    target="_blank"
-                    rel="noopener noreferrer">
-                    FAQ
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <div style={{ marginBottom: '1rem' }}>
-              <h3>Showcase</h3>
-              <ul style={{ listStyle: 'none', padding: 0 }}>
-                <li>
-                  <a
-                    href="https://github.com/SkywardAI"
-                    target="_blank"
-                    rel="noopener noreferrer">
-                    AI Powered Chatbot
-                  </a>
-                </li>
-              </ul>
-            </div>
+        <footer className={styles.footer}>
+          <div className={styles.footerContent}>
+            {[
+              {
+                title: 'Product',
+                items: ['AI Powered Chatbot', 'RAG', 'E-Commerce'],
+              },
+              {
+                title: 'Solutions',
+                items: ['Getting Started', 'API Reference', 'FAQ'],
+              },
+              { title: 'Showcase', items: ['AI Powered Chatbot'] },
+            ].map((section) => (
+              <div key={section.title} className={styles.footerSection}>
+                <h3>{section.title}</h3>
+                <ul className={styles.footerLinks}>
+                  {section.items.map((item) => (
+                    <li key={item}>
+                      <a
+                        href="https://github.com/SkywardAI"
+                        target="_blank"
+                        rel="noopener noreferrer">
+                        {item}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
-          <div style={{ textAlign: 'center', marginTop: '1rem' }}>
+
+          {/* 社交媒体链接 */}
+          <div className={styles.socialMedia}>
+            <a
+              href="https://github.com/SkywardAI"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.socialIcon}>
+              <Github size={24} />
+            </a>
+            <a
+              href="https://linkedin.com/company/SkywardAI"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.socialIcon}>
+              <Linkedin size={24} />
+            </a>
+            <a
+              href="https://twitter.com/SkywardAI"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.socialIcon}>
+              <Twitter size={24} />
+            </a>
+            <a
+              href="https://facebook.com/SkywardAI"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.socialIcon}>
+              <Facebook size={24} />
+            </a>
+          </div>
+
+          {/* 底部版权信息 */}
+          <div className={styles.footerBottom}>
             <p>
               © 2024 - {new Date().getFullYear()} SkywardAI. All Rights
               Reserved.
