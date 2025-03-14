@@ -43,7 +43,6 @@ export async function POST(req: Request) {
 
     console.log('✅ 开始流式传输 AI 响应')
 
-    const encoder = new TextEncoder()
     const reader = response.body.getReader()
 
     const stream = new ReadableStream({
