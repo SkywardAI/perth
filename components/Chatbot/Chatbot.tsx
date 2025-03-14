@@ -33,7 +33,15 @@ export default function Chatbot() {
 
     const requestBody = {
       model: 'gpt-4',
-      messages: [...messages, { role: 'user', content: input }],
+      messages: [
+        {
+          role: 'system',
+          content:
+            'You are a helpful assistant that can only respond to questions related to SkywardAI Open Source Community.',
+        },
+        ...messages,
+        { role: 'user', content: input },
+      ],
       stream: true,
     }
 
@@ -136,18 +144,26 @@ export default function Chatbot() {
                 key={index}
                 className={
                   message.role === 'user'
-                    ? styles.userMessage
-                    : styles.botMessage
+                    ? styles.userMessageWrapper
+                    : styles.botMessageWrapper
                 }>
                 {message.role === 'assistant' && (
                   <span className={styles.botAvatar}>🤖</span>
                 )}
-                <span>{message.content}</span>
+                <div
+                  className={
+                    message.role === 'user'
+                      ? styles.userMessage
+                      : styles.botMessage
+                  }>
+                  {message.content}
+                </div>
               </div>
             ))}
             {isLoading && (
-              <div className={styles.botMessage}>
-                <span className={styles.botAvatar}>🤖</span> Typing...
+              <div className={styles.botMessageWrapper}>
+                <span className={styles.botAvatar}>🤖</span>
+                <div className={styles.botMessage}>Thinking...</div>
               </div>
             )}
           </div>
