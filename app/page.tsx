@@ -6,6 +6,7 @@ export default function HomePage() {
       <h1>Welcome to SkywardAI</h1>
       <p>Your one-stop destination for innovative AI solutions.</p>
       <Carousel />
+      <Carousel />
     </section>
   )
 }

@@ -1,0 +1,96 @@
+.chatButton {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.chatContainer {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  width: 320px;
+  height: 400px; /* ✅ 固定最大化大小 */
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.chatHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background: #007bff;
+  color: white;
+  font-weight: bold;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.chatMessages {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+.userMessage {
+  background: #007bff;
+  color: white;
+  padding: 8px;
+  border-radius: 5px;
+  margin: 5px;
+  align-self: flex-end;
+  max-width: 80%;
+}
+
+.botMessage {
+  display: flex;
+  align-items: center;
+  background: #f1f1f1;
+  padding: 8px;
+  border-radius: 5px;
+  margin: 5px;
+  max-width: 80%;
+}
+
+.botAvatar {
+  margin-right: 8px;
+}
+
+.chatForm {
+  display: flex;
+  padding: 10px;
+  border-top: 1px solid #ddd;
+}
+
+.chatInput {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.sendButton {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  margin-left: 5px;
+}
