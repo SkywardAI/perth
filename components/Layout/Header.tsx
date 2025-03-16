@@ -13,7 +13,6 @@ export default function Header() {
   return (
     <header className={styles.header}>
       <div className={styles.navbar}>
-        {/* 左侧：品牌 + 导航菜单 */}
         <div className={styles.navLeft}>
           {/* Brand */}
           <div className={styles.brand}>
