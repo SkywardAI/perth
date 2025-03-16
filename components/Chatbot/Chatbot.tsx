@@ -20,6 +20,7 @@ export default function Chatbot() {
   const [isAgentOnline, setIsAgentOnline] = useState(true) // 人工客服是否在线（默认在线，可后续接 API）
 
   const chatContainerRef = useRef<HTMLDivElement>(null)
+  setIsAgentOnline(true)
 
   useEffect(() => {
     if (chatContainerRef.current) {
