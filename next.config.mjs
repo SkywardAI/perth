@@ -1,11 +1,11 @@
 import nextra from 'nextra'
 
 const withNextra = nextra({
-  // theme: 'nextra-theme-docs',
-  // themeConfig: './theme.config.ts',
+  latex: true,
   search: {
-    codeblocks: false,
+    codeblocks: false
   },
+  contentDirBasePath: '/docs'
 })
 
 
