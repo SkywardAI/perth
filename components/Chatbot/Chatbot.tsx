@@ -17,10 +17,10 @@ export default function Chatbot() {
   const [isLoading, setIsLoading] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const [isAgentMode, setIsAgentMode] = useState(false) // 是否切换到人工客服模式
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isAgentOnline, setIsAgentOnline] = useState(true) // 人工客服是否在线（默认在线，可后续接 API）
 
   const chatContainerRef = useRef<HTMLDivElement>(null)
-  setIsAgentOnline(true)
 
   useEffect(() => {
     if (chatContainerRef.current) {
