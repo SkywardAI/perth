@@ -11,8 +11,7 @@ const withNextra = nextra({
 
 export default withNextra({
   experimental: {
-    turbo: true,
-    appDir: true,
+    turbo: true
   },
   reactStrictMode: true,
   images: {
