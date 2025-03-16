@@ -16,7 +16,7 @@
   bottom: 80px;
   right: 20px;
   width: 320px;
-  height: 400px;
+  height: 450px;
   background: white;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -29,12 +29,49 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
+  padding: 15px;
   background: #007bff;
   color: white;
   font-weight: bold;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
+  height: 60px;
+}
+
+.agentToggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: white;
+  color: #007bff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.agentToggle:hover {
+  background: #0056b3;
+  color: white;
+}
+
+.agentStatus {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.online {
+  color: #28a745;
+}
+
+.offline {
+  color: #dc3545;
 }
 
 .closeButton {
@@ -53,10 +90,11 @@
   gap: 5px;
 }
 
-/* 机器人消息 */
 .botMessageWrapper {
   display: flex;
   align-items: flex-start;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
 .botMessage {
@@ -72,12 +110,37 @@
   margin-right: 8px;
   font-size: 20px;
   flex-shrink: 0;
+  color: #007bff;
 }
 
-/* 用户消息 */
+.agentMessageWrapper {
+  display: flex;
+  align-items: flex-start;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.agentMessage {
+  background: #ffe4b5;
+  padding: 8px 12px;
+  border-radius: 8px;
+  max-width: 75%;
+  text-align: left;
+  word-wrap: break-word;
+}
+
+.agentAvatar {
+  margin-right: 8px;
+  font-size: 18px;
+  flex-shrink: 0;
+  color: #ff9800;
+}
+
 .userMessageWrapper {
   display: flex;
   justify-content: flex-end;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
 .userMessage {
@@ -90,7 +153,6 @@
   word-wrap: break-word;
 }
 
-/* 输入框 */
 .chatForm {
   display: flex;
   padding: 10px;
