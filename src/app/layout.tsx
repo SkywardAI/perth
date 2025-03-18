@@ -1,13 +1,14 @@
-// import Layout from '../components/Layout/layout'
-import Chatbot from '../components/Chatbot/Chatbot'
+import Footer from '../components/footer/footer'
+import Chatbot from '../components/chatbot/chatbot'
 
 import { GitHubIcon } from 'nextra/icons'
 
-import { Footer, Layout, Navbar } from 'nextra-theme-docs'
+import { Layout, Navbar } from 'nextra-theme-docs' //According to our needs, we did not use the original footer. If there is no additional requirement, just add Footer here.
 import { Banner, Head } from 'nextra/components'
 import { getPageMap } from 'nextra/page-map'
 import 'nextra-theme-docs/style.css'
-import { Github, Linkedin, Twitter, Facebook } from 'lucide-react'
+import '../style/global.css'
+// import { Github, Linkedin, Twitter, Facebook } from 'lucide-react'
 
 export const metadata = {
   // Define your metadata here
@@ -33,8 +34,8 @@ const navbar = (
 
 const footer = (
   <Footer>
-    <div>Apache 2.0 {new Date().getFullYear()} © SkywardAI.</div>
-    <div className="social-media">
+    {/* <div>Apache 2.0 {new Date().getFullYear()} © SkywardAI.</div>
+    <div>
       <a
         href="https://github.com/your-profile"
         target="_blank"
@@ -59,7 +60,7 @@ const footer = (
         rel="noopener noreferrer">
         <Facebook size={24} />
       </a>
-    </div>
+    </div> */}
   </Footer>
 )
 
@@ -72,7 +73,7 @@ export default async function RootLayout({ children }) {
       dir="ltr"
       // Suggested by `next-themes` package https://github.com/pacocoursey/next-themes#with-app
       suppressHydrationWarning>
-      <Head></Head>
+      <Head />
       <body>
         <Layout
           navigation={{
