@@ -18,15 +18,28 @@
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+  gap: 20px;
+  padding: 1rem 0;
 }
 
 .footerSection {
+  flex: 1;
+  min-width: 150px;
+  margin: 0;
   margin-bottom: 1rem;
+}
+.footerSection h2 {
+  font-size: 1.25rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
 }
 
 .footerLinks ul {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 .footerBottom {

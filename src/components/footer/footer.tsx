@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import { useTheme } from 'next-themes'
 import styles from './footer.module.css'
-import { Github, Linkedin, Twitter, Facebook } from 'lucide-react'
+import { Github, Linkedin, Twitter, Newspaper } from 'lucide-react'
 
 export default function Footer() {
   const { resolvedTheme } = useTheme()
@@ -31,10 +31,9 @@ export default function Footer() {
             title: 'Solutions',
             items: ['Getting Started', 'API Reference', 'FAQ'],
           },
-          { title: 'Showcase', items: ['AI Powered Chatbot'] },
         ].map((section) => (
           <div key={section.title} className={styles.footerSection}>
-            <h3>{section.title}</h3>
+            <h2>{section.title}</h2>
             <ul className={styles.footerLinks}>
               {section.items.map((item) => (
                 <li key={item}>
@@ -60,25 +59,25 @@ export default function Footer() {
           <Github size={24} />
         </a>
         <a
-          href="https://linkedin.com/company/SkywardAI"
+          href="https://www.linkedin.com/in/bowen-li-10101197/"
           target="_blank"
           rel="noopener noreferrer"
           className={styles.socialIcon}>
           <Linkedin size={24} />
         </a>
         <a
-          href="https://twitter.com/SkywardAI"
+          href="https://x.com/AisukoLi"
           target="_blank"
           rel="noopener noreferrer"
           className={styles.socialIcon}>
           <Twitter size={24} />
         </a>
         <a
-          href="https://facebook.com/SkywardAI"
+          href="https://aisuko.substack.com"
           target="_blank"
           rel="noopener noreferrer"
           className={styles.socialIcon}>
-          <Facebook size={24} />
+          <Newspaper size={24} />
         </a>
       </div>
 
