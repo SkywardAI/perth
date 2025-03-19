@@ -2,23 +2,34 @@
 
 import { useState, useRef, useEffect } from 'react'
 import styles from './chatbot.module.css'
-import { X, Headphones } from 'lucide-react'
+import { X, Headphones, ChevronDown, ChevronUp } from 'lucide-react'
 
 export default function Chatbot() {
   const [messages, setMessages] = useState<
-    { role: string; content: string; isAgent?: boolean }[]
+    {
+      role: string
+      content: string
+      isAgent?: boolean
+      isExpanded?: boolean
+      references?: { name: string; url: string }[]
+      thinkingProcess?: string
+    }[]
   >([
     {
       role: 'assistant',
       content: 'Hi, I am AI Assistant 🤖, How can I help you?',
+      thinkingProcess: '',
     },
   ])
+
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const [isAgentMode, setIsAgentMode] = useState(false)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isAgentOnline, setIsAgentOnline] = useState(true) //API can be connected in the future, temporarily set to online by default
+  const [isAgentOnline, setIsAgentOnline] = useState(true)
+  const [showReferences, setShowReferences] = useState(false)
+  const [enableWebSearch, setEnableWebSearch] = useState(false)
   const [theme, setTheme] = useState('light')
 
   const chatContainerRef = useRef<HTMLDivElement>(null)
@@ -46,7 +57,10 @@ export default function Chatbot() {
     event.preventDefault()
     if (!input.trim()) return
 
-    setMessages((prev) => [...prev, { role: 'user', content: input }])
+    setMessages((prev) => [
+      ...prev.filter((msg) => msg.content.trim() !== ''),
+      { role: 'user', content: input.trim() },
+    ])
 
     if (isAgentMode) {
       setMessages((prev) => [
@@ -63,16 +77,9 @@ export default function Chatbot() {
 
     const requestBody = {
       model: 'gpt-4',
-      messages: [
-        {
-          role: 'system',
-          content:
-            'You are a helpful assistant that can only respond to questions related to SkywardAI Open Source Community.',
-        },
-        ...messages,
-        { role: 'user', content: input },
-      ],
+      messages: [...messages, { role: 'user', content: input }],
       stream: true,
+      enableWebSearch,
     }
 
     setInput('')
@@ -92,10 +99,19 @@ export default function Chatbot() {
 
     const reader = response.body.getReader()
     const decoder = new TextDecoder()
-    let accumulatedMessage = ''
 
     const processStream = async () => {
+      let accumulatedMessage = ''
+      let thinkingProcess = ''
+      let isThinkingProcess = true
       let buffer = ''
+
+      let tempMessage = {
+        role: 'assistant',
+        content: '',
+        thinkingProcess: '',
+        isExpanded: true,
+      }
 
       while (true) {
         const { done, value } = await reader.read()
@@ -116,28 +132,28 @@ export default function Chatbot() {
             const json = JSON.parse(line)
 
             if (json.choices && json.choices[0]?.delta?.content) {
-              accumulatedMessage += json.choices[0].delta.content
+              let content = json.choices[0].delta.content
 
-              setMessages((prev) => {
-                const lastMessage = prev[prev.length - 1]
-                if (lastMessage?.role === 'assistant') {
-                  return [
-                    ...prev.slice(0, -1),
-                    { role: 'assistant', content: accumulatedMessage },
-                  ]
-                } else {
-                  return [
-                    ...prev,
-                    { role: 'assistant', content: accumulatedMessage },
-                  ]
-                }
-              })
+              if (isThinkingProcess && content.includes('###THINKING-END###')) {
+                isThinkingProcess = false
+                thinkingProcess = thinkingProcess
+                  .replace('###THINKING-END###', '')
+                  .trim()
+              } else if (isThinkingProcess) {
+                thinkingProcess += content
+              } else {
+                accumulatedMessage += content
+              }
+
+              tempMessage.thinkingProcess = thinkingProcess.trim()
+              tempMessage.content = accumulatedMessage.trim()
             }
           } catch (error) {
             console.error('❌ JSON', error)
           }
         }
       }
+      setMessages((prev) => [...prev, { ...tempMessage }])
       setIsLoading(false)
     }
 
@@ -162,13 +178,19 @@ export default function Chatbot() {
               {isAgentMode ? 'Live Chat Support 🧑‍💻' : 'AI Assistant 🤖'}
             </span>
 
-            {isAgentMode && (
+            {isAgentMode ? (
               <span
                 className={`${styles.agentStatus} ${
                   isAgentOnline ? styles.online : styles.offline
                 }`}>
                 {isAgentOnline ? '🟢 Online' : '🔴 Offline'}
               </span>
+            ) : (
+              <button
+                className={styles.searchToggleButton}
+                onClick={() => setEnableWebSearch(!enableWebSearch)}>
+                {enableWebSearch ? '🔍 Web Search: ON' : '🔍 Web Search: OFF'}
+              </button>
             )}
 
             <button
@@ -185,30 +207,79 @@ export default function Chatbot() {
             </button>
           </div>
 
+          <button
+            className={styles.referencesToggle}
+            onClick={() => setShowReferences(!showReferences)}>
+            📚 {showReferences ? 'Hide References' : 'Show References'}
+          </button>
+
           <div className={styles.chatMessages} ref={chatContainerRef}>
             {messages.map((message, index) => (
-              <div
-                key={index}
-                className={
-                  message.role === 'user'
-                    ? styles.userMessageWrapper
-                    : styles.botMessageWrapper
-                }>
-                {message.role === 'assistant' && (
-                  <span className={styles.botAvatar}>
-                    {message.isAgent ? '👨‍💼' : '🤖'}
-                  </span>
-                )}
-                <div
-                  className={
-                    message.role === 'user'
-                      ? styles.userMessage
-                      : styles.botMessage
-                  }>
-                  {message.content}
-                </div>
+              <div key={index}>
+                {message.thinkingProcess &&
+                  !messages.some(
+                    (m, i) =>
+                      i < index && m.thinkingProcess === message.thinkingProcess
+                  ) && (
+                    <div className={styles.botMessageWrapper}>
+                      <span className={styles.botAvatar}>🤖</span>
+                      <div className={styles.botMessage}>
+                        <button
+                          className={styles.expandButton}
+                          onClick={() => {
+                            setMessages((prev) =>
+                              prev.map((msg, i) =>
+                                i === index
+                                  ? { ...msg, isExpanded: !msg.isExpanded }
+                                  : msg
+                              )
+                            )
+                          }}>
+                          {message.isExpanded
+                            ? '🔽 Hide Thinking'
+                            : '🔍 Show Thinking'}
+                        </button>
+
+                        {message.isExpanded && (
+                          <div className={`${styles.thinkingProcess} show`}>
+                            <strong>Thinking Process:</strong>
+                            <div>{message.thinkingProcess}</div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                {message.content &&
+                  !messages.some(
+                    (m, i) => i < index && m.content === message.content
+                  ) && (
+                    <div
+                      className={
+                        message.role === 'user'
+                          ? styles.userMessageWrapper
+                          : styles.botMessageWrapper
+                      }>
+                      {message.role === 'assistant' && (
+                        <span className={styles.botAvatar}>
+                          {message.isAgent ? '👨‍💼' : '🤖'}
+                        </span>
+                      )}
+                      <div
+                        className={
+                          message.role === 'user'
+                            ? styles.userMessage
+                            : styles.botMessage
+                        }>
+                        <div className={styles.finalAnswer}>
+                          {message.content}
+                        </div>
+                      </div>
+                    </div>
+                  )}
               </div>
             ))}
+
             {isLoading && (
               <div className={styles.botMessageWrapper}>
                 <span className={styles.botAvatar}>🤖</span>
