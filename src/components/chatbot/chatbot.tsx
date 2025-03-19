@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import styles from './chatbot.module.css'
-import { X, Headphones, ChevronDown, ChevronUp } from 'lucide-react'
+import { X, Headphones } from 'lucide-react'
 
 export default function Chatbot() {
   const [messages, setMessages] = useState<
@@ -106,7 +106,7 @@ export default function Chatbot() {
       let isThinkingProcess = true
       let buffer = ''
 
-      let tempMessage = {
+      const tempMessage = {
         role: 'assistant',
         content: '',
         thinkingProcess: '',
@@ -132,7 +132,7 @@ export default function Chatbot() {
             const json = JSON.parse(line)
 
             if (json.choices && json.choices[0]?.delta?.content) {
-              let content = json.choices[0].delta.content
+              const content = json.choices[0].delta.content
 
               if (isThinkingProcess && content.includes('###THINKING-END###')) {
                 isThinkingProcess = false
