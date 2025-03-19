@@ -15,7 +15,7 @@
   position: fixed;
   bottom: 80px;
   right: 20px;
-  width: 360px;
+  width: 440px;
   height: 450px;
   background: var(--chat-bg-color, white);
   color: var(--chat-text-color, black);
@@ -224,4 +224,54 @@
   padding: 8px;
   cursor: pointer;
   margin-left: 5px;
+}
+
+.thinkingProcess {
+  background: #fff8e1;
+  color: #333;
+  padding: 10px;
+  border-left: 4px solid #007bff;
+  border-radius: 6px;
+  font-size: 14px;
+  margin-top: 5px;
+  display: block;
+}
+
+.thinkingProcess.show {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.expandButton {
+  background: none;
+  border: none;
+  color: #007bff;
+  font-size: 12px;
+  cursor: pointer;
+  margin-left: 5px;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.expandButton:hover {
+  text-decoration: underline;
+}
+
+.searchToggleButton {
+  position: absolute;
+  right: 0%;
+  bottom: 10px;
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.searchToggleButton:hover {
+  background: #0056b3;
 }
