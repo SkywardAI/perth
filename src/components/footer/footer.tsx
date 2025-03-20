@@ -81,6 +81,16 @@ export default function Footer() {
         </a>
       </div>
 
+      <div className={styles.subscribeContainer}>
+        <a
+          href="https://github.com/SkywardAI"
+          target="_blank"
+          rel="noopener noreferrer"
+          className={styles.subscribeButton}>
+          Subscribe community
+        </a>
+      </div>
+
       <div className={styles.footerBottom}>
         <p>
           © 2024 - {new Date().getFullYear()} SkywardAI. All Rights Reserved.

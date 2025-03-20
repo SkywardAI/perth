@@ -105,6 +105,9 @@
   color: white;
   cursor: pointer;
   margin-left: 10px;
+  position: absolute;
+  top: 3%;
+  right: 2%;
 }
 
 .chatMessages {
