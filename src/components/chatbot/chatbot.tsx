@@ -22,6 +22,7 @@ export default function Chatbot() {
   const [isLoading, setIsLoading] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const [isAgentMode, setIsAgentMode] = useState(false)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isAgentOnline, setIsAgentOnline] = useState(true)
   const [enableWebSearch, setEnableWebSearch] = useState(false)
   const [theme, setTheme] = useState('light')
