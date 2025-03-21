@@ -1,7 +1,6 @@
 export async function POST(req: Request) {
   try {
     const body = await req.json()
-    console.log('✅ 收到请求:', JSON.stringify(body, null, 2))
 
     if (
       !body.messages ||
@@ -14,11 +13,23 @@ export async function POST(req: Request) {
       )
     }
 
+    const prompt = [
+      {
+        role: 'system',
+        content:
+          'You are an AI that explains its reasoning step by step before answering questions. Please first output your detailed thinking process, then your final answer after a Line Breaks. You are a helpful assistant that can only respond to questions related to SkywardAI Open Source Community.',
+      },
+      ...body.messages,
+    ]
+
+    const filteredMessages = prompt.map(({ role, content }) => ({
+      role,
+      content,
+    }))
+
     const azureApiUrl = `${process.env.AZURE_OPENAI_ENDPOINT}openai/deployments/${process.env.AZURE_OPENAI_DEPLOYMENT_ID}/chat/completions?api-version=${process.env.AZURE_OPENAI_API_VERSION}`
 
-    console.log('🚀 发送到 Azure OpenAI:', azureApiUrl)
-
-    const response = await fetch(azureApiUrl, {
+    const responseFromAzure = await fetch(azureApiUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -26,24 +37,22 @@ export async function POST(req: Request) {
       },
       body: JSON.stringify({
         model: process.env.AZURE_OPENAI_DEPLOYMENT_ID,
-        messages: body.messages,
+        messages: filteredMessages,
         temperature: 0.7,
-        stream: true, // ✅ 确保启用流式传输
+        stream: true,
       }),
     })
 
-    if (!response.ok || !response.body) {
-      const errorText = await response.text()
-      console.error('❌ Azure OpenAI 请求失败:', errorText)
+    if (!responseFromAzure.ok || !responseFromAzure.body) {
+      const errorText = await responseFromAzure.text()
+      console.error('❌ Azure OpenAI API Error:', errorText)
       return new Response(
         JSON.stringify({ error: 'Azure OpenAI API Error', details: errorText }),
         { status: 500 }
       )
     }
 
-    console.log('✅ 开始流式传输 AI 响应')
-
-    const reader = response.body.getReader()
+    const reader = responseFromAzure.body.getReader()
 
     const stream = new ReadableStream({
       async start(controller) {
@@ -55,7 +64,7 @@ export async function POST(req: Request) {
           }
           controller.close()
         } catch (error) {
-          console.error('❌ 流式传输错误:', error)
+          console.error('❌ stream output fail:', error)
           controller.error(error)
         }
       },
@@ -66,7 +75,7 @@ export async function POST(req: Request) {
       headers: { 'Content-Type': 'text/event-stream' },
     })
   } catch (error) {
-    console.error('❌ 服务器错误:', error)
+    console.error('❌ server fail:', error)
     return new Response(JSON.stringify({ error: 'Internal Server Error' }), {
       status: 500,
     })

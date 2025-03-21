@@ -15,8 +15,8 @@
   position: fixed;
   bottom: 80px;
   right: 20px;
-  width: 360px;
-  height: 450px;
+  width: 660px;
+  height: 700px;
   background: var(--chat-bg-color, white);
   color: var(--chat-text-color, black);
   border-radius: 10px;
@@ -105,6 +105,9 @@
   color: white;
   cursor: pointer;
   margin-left: 10px;
+  position: absolute;
+  top: 3%;
+  right: 2%;
 }
 
 .chatMessages {
@@ -119,8 +122,7 @@
 .botMessageWrapper {
   display: flex;
   align-items: flex-start;
-  padding-left: 5px;
-  padding-right: 5px;
+  padding: 0 5px;
 }
 
 .botMessage {
@@ -145,40 +147,10 @@
   color: #007bff;
 }
 
-.agentMessageWrapper {
-  display: flex;
-  align-items: flex-start;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-.agentMessage {
-  background: #ffe4b5;
-  color: #333;
-  padding: 8px 12px;
-  border-radius: 8px;
-  max-width: 75%;
-  text-align: left;
-  word-wrap: break-word;
-}
-
-.dark .agentMessage {
-  background: #775a35;
-  color: white;
-}
-
-.agentAvatar {
-  margin-right: 8px;
-  font-size: 18px;
-  flex-shrink: 0;
-  color: #ff9800;
-}
-
 .userMessageWrapper {
   display: flex;
   justify-content: flex-end;
-  padding-left: 5px;
-  padding-right: 5px;
+  padding: 0 5px;
 }
 
 .userMessage {
@@ -224,4 +196,23 @@
   padding: 8px;
   cursor: pointer;
   margin-left: 5px;
+}
+
+.searchToggleButton {
+  position: absolute;
+  right: 0%;
+  bottom: 10px;
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.searchToggleButton:hover {
+  background: #0056b3;
 }

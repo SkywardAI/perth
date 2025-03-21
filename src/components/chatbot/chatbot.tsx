@@ -6,19 +6,25 @@ import { X, Headphones } from 'lucide-react'
 
 export default function Chatbot() {
   const [messages, setMessages] = useState<
-    { role: string; content: string; isAgent?: boolean }[]
+    {
+      role: string
+      content: string
+      isAgent?: boolean
+    }[]
   >([
     {
       role: 'assistant',
       content: 'Hi, I am AI Assistant 🤖, How can I help you?',
     },
   ])
+
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const [isAgentMode, setIsAgentMode] = useState(false)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isAgentOnline, setIsAgentOnline] = useState(true) //API can be connected in the future, temporarily set to online by default
+  const [isAgentOnline, setIsAgentOnline] = useState(true)
+  const [enableWebSearch, setEnableWebSearch] = useState(false)
   const [theme, setTheme] = useState('light')
 
   const chatContainerRef = useRef<HTMLDivElement>(null)
@@ -46,7 +52,10 @@ export default function Chatbot() {
     event.preventDefault()
     if (!input.trim()) return
 
-    setMessages((prev) => [...prev, { role: 'user', content: input }])
+    setMessages((prev) => [
+      ...prev.filter((msg) => msg.content.trim() !== ''),
+      { role: 'user', content: input.trim() },
+    ])
 
     if (isAgentMode) {
       setMessages((prev) => [
@@ -63,16 +72,9 @@ export default function Chatbot() {
 
     const requestBody = {
       model: 'gpt-4',
-      messages: [
-        {
-          role: 'system',
-          content:
-            'You are a helpful assistant that can only respond to questions related to SkywardAI Open Source Community.',
-        },
-        ...messages,
-        { role: 'user', content: input },
-      ],
+      messages: [...messages, { role: 'user', content: input }],
       stream: true,
+      enableWebSearch,
     }
 
     setInput('')
@@ -92,10 +94,12 @@ export default function Chatbot() {
 
     const reader = response.body.getReader()
     const decoder = new TextDecoder()
-    let accumulatedMessage = ''
 
     const processStream = async () => {
+      let accumulatedMessage = ''
       let buffer = ''
+
+      setMessages((prev) => [...prev, { role: 'assistant', content: '' }])
 
       while (true) {
         const { done, value } = await reader.read()
@@ -109,32 +113,25 @@ export default function Chatbot() {
           line = line.trim()
           if (!line || !line.startsWith('data: ')) continue
           line = line.replace(/^data: /, '')
-
           if (line === '[DONE]') continue
 
           try {
             const json = JSON.parse(line)
-
             if (json.choices && json.choices[0]?.delta?.content) {
-              accumulatedMessage += json.choices[0].delta.content
+              const content = json.choices[0].delta.content
+              accumulatedMessage += content
 
               setMessages((prev) => {
-                const lastMessage = prev[prev.length - 1]
-                if (lastMessage?.role === 'assistant') {
-                  return [
-                    ...prev.slice(0, -1),
-                    { role: 'assistant', content: accumulatedMessage },
-                  ]
-                } else {
-                  return [
-                    ...prev,
-                    { role: 'assistant', content: accumulatedMessage },
-                  ]
+                const updated = [...prev]
+                updated[updated.length - 1] = {
+                  role: 'assistant',
+                  content: accumulatedMessage,
                 }
+                return updated
               })
             }
           } catch (error) {
-            console.error('❌ JSON', error)
+            console.error('❌ JSON parse error', error)
           }
         }
       }
@@ -162,13 +159,19 @@ export default function Chatbot() {
               {isAgentMode ? 'Live Chat Support 🧑‍💻' : 'AI Assistant 🤖'}
             </span>
 
-            {isAgentMode && (
+            {isAgentMode ? (
               <span
                 className={`${styles.agentStatus} ${
                   isAgentOnline ? styles.online : styles.offline
                 }`}>
                 {isAgentOnline ? '🟢 Online' : '🔴 Offline'}
               </span>
+            ) : (
+              <button
+                className={styles.searchToggleButton}
+                onClick={() => setEnableWebSearch(!enableWebSearch)}>
+                {enableWebSearch ? '🔍 Web Search: ON' : '🔍 Web Search: OFF'}
+              </button>
             )}
 
             <button
@@ -184,6 +187,10 @@ export default function Chatbot() {
               <X size={18} />
             </button>
           </div>
+
+          <button className={styles.referencesToggle} onClick={() => {}}>
+            📚 References
+          </button>
 
           <div className={styles.chatMessages} ref={chatContainerRef}>
             {messages.map((message, index) => (
@@ -209,6 +216,7 @@ export default function Chatbot() {
                 </div>
               </div>
             ))}
+
             {isLoading && (
               <div className={styles.botMessageWrapper}>
                 <span className={styles.botAvatar}>🤖</span>

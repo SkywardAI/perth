@@ -62,3 +62,34 @@
 .socialIcon:hover {
   color: #007bff;
 }
+
+.subscribeContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.subscribeButton {
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.footerLight .subscribeButton {
+  background-color: #007bff;
+  color: white;
+  border: 1px solid #007bff;
+}
+
+.footerDark .subscribeButton {
+  background-color: white;
+  color: #121212;
+  border: 1px solid white;
+}
+
+.subscribeButton:hover {
+  opacity: 0.8;
+}
