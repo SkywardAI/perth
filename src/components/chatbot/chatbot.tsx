@@ -10,15 +10,11 @@ export default function Chatbot() {
       role: string
       content: string
       isAgent?: boolean
-      isExpanded?: boolean
-      references?: { name: string; url: string }[]
-      thinkingProcess?: string
     }[]
   >([
     {
       role: 'assistant',
       content: 'Hi, I am AI Assistant 🤖, How can I help you?',
-      thinkingProcess: '',
     },
   ])
 
@@ -26,9 +22,7 @@ export default function Chatbot() {
   const [isLoading, setIsLoading] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const [isAgentMode, setIsAgentMode] = useState(false)
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isAgentOnline, setIsAgentOnline] = useState(true)
-  const [showReferences, setShowReferences] = useState(false)
   const [enableWebSearch, setEnableWebSearch] = useState(false)
   const [theme, setTheme] = useState('light')
 
@@ -102,16 +96,9 @@ export default function Chatbot() {
 
     const processStream = async () => {
       let accumulatedMessage = ''
-      let thinkingProcess = ''
-      let isThinkingProcess = true
       let buffer = ''
 
-      const tempMessage = {
-        role: 'assistant',
-        content: '',
-        thinkingProcess: '',
-        isExpanded: true,
-      }
+      setMessages((prev) => [...prev, { role: 'assistant', content: '' }])
 
       while (true) {
         const { done, value } = await reader.read()
@@ -125,35 +112,28 @@ export default function Chatbot() {
           line = line.trim()
           if (!line || !line.startsWith('data: ')) continue
           line = line.replace(/^data: /, '')
-
           if (line === '[DONE]') continue
 
           try {
             const json = JSON.parse(line)
-
             if (json.choices && json.choices[0]?.delta?.content) {
               const content = json.choices[0].delta.content
+              accumulatedMessage += content
 
-              if (isThinkingProcess && content.includes('###THINKING-END###')) {
-                isThinkingProcess = false
-                thinkingProcess = thinkingProcess
-                  .replace('###THINKING-END###', '')
-                  .trim()
-              } else if (isThinkingProcess) {
-                thinkingProcess += content
-              } else {
-                accumulatedMessage += content
-              }
-
-              tempMessage.thinkingProcess = thinkingProcess.trim()
-              tempMessage.content = accumulatedMessage.trim()
+              setMessages((prev) => {
+                const updated = [...prev]
+                updated[updated.length - 1] = {
+                  role: 'assistant',
+                  content: accumulatedMessage,
+                }
+                return updated
+              })
             }
           } catch (error) {
-            console.error('❌ JSON', error)
+            console.error('❌ JSON parse error', error)
           }
         }
       }
-      setMessages((prev) => [...prev, { ...tempMessage }])
       setIsLoading(false)
     }
 
@@ -207,76 +187,32 @@ export default function Chatbot() {
             </button>
           </div>
 
-          <button
-            className={styles.referencesToggle}
-            onClick={() => setShowReferences(!showReferences)}>
-            📚 {showReferences ? 'Hide References' : 'Show References'}
+          <button className={styles.referencesToggle} onClick={() => {}}>
+            📚 References
           </button>
 
           <div className={styles.chatMessages} ref={chatContainerRef}>
             {messages.map((message, index) => (
-              <div key={index}>
-                {message.thinkingProcess &&
-                  !messages.some(
-                    (m, i) =>
-                      i < index && m.thinkingProcess === message.thinkingProcess
-                  ) && (
-                    <div className={styles.botMessageWrapper}>
-                      <span className={styles.botAvatar}>🤖</span>
-                      <div className={styles.botMessage}>
-                        <button
-                          className={styles.expandButton}
-                          onClick={() => {
-                            setMessages((prev) =>
-                              prev.map((msg, i) =>
-                                i === index
-                                  ? { ...msg, isExpanded: !msg.isExpanded }
-                                  : msg
-                              )
-                            )
-                          }}>
-                          {message.isExpanded
-                            ? '🔽 Hide Thinking'
-                            : '🔍 Show Thinking'}
-                        </button>
-
-                        {message.isExpanded && (
-                          <div className={`${styles.thinkingProcess} show`}>
-                            <strong>Thinking Process:</strong>
-                            <div>{message.thinkingProcess}</div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  )}
-
-                {message.content &&
-                  !messages.some(
-                    (m, i) => i < index && m.content === message.content
-                  ) && (
-                    <div
-                      className={
-                        message.role === 'user'
-                          ? styles.userMessageWrapper
-                          : styles.botMessageWrapper
-                      }>
-                      {message.role === 'assistant' && (
-                        <span className={styles.botAvatar}>
-                          {message.isAgent ? '👨‍💼' : '🤖'}
-                        </span>
-                      )}
-                      <div
-                        className={
-                          message.role === 'user'
-                            ? styles.userMessage
-                            : styles.botMessage
-                        }>
-                        <div className={styles.finalAnswer}>
-                          {message.content}
-                        </div>
-                      </div>
-                    </div>
-                  )}
+              <div
+                key={index}
+                className={
+                  message.role === 'user'
+                    ? styles.userMessageWrapper
+                    : styles.botMessageWrapper
+                }>
+                {message.role === 'assistant' && (
+                  <span className={styles.botAvatar}>
+                    {message.isAgent ? '👨‍💼' : '🤖'}
+                  </span>
+                )}
+                <div
+                  className={
+                    message.role === 'user'
+                      ? styles.userMessage
+                      : styles.botMessage
+                  }>
+                  {message.content}
+                </div>
               </div>
             ))}
 

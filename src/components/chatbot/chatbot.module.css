@@ -15,8 +15,8 @@
   position: fixed;
   bottom: 80px;
   right: 20px;
-  width: 440px;
-  height: 450px;
+  width: 660px;
+  height: 700px;
   background: var(--chat-bg-color, white);
   color: var(--chat-text-color, black);
   border-radius: 10px;
@@ -122,8 +122,7 @@
 .botMessageWrapper {
   display: flex;
   align-items: flex-start;
-  padding-left: 5px;
-  padding-right: 5px;
+  padding: 0 5px;
 }
 
 .botMessage {
@@ -148,40 +147,10 @@
   color: #007bff;
 }
 
-.agentMessageWrapper {
-  display: flex;
-  align-items: flex-start;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-.agentMessage {
-  background: #ffe4b5;
-  color: #333;
-  padding: 8px 12px;
-  border-radius: 8px;
-  max-width: 75%;
-  text-align: left;
-  word-wrap: break-word;
-}
-
-.dark .agentMessage {
-  background: #775a35;
-  color: white;
-}
-
-.agentAvatar {
-  margin-right: 8px;
-  font-size: 18px;
-  flex-shrink: 0;
-  color: #ff9800;
-}
-
 .userMessageWrapper {
   display: flex;
   justify-content: flex-end;
-  padding-left: 5px;
-  padding-right: 5px;
+  padding: 0 5px;
 }
 
 .userMessage {
@@ -227,37 +196,6 @@
   padding: 8px;
   cursor: pointer;
   margin-left: 5px;
-}
-
-.thinkingProcess {
-  background: #fff8e1;
-  color: #333;
-  padding: 10px;
-  border-left: 4px solid #007bff;
-  border-radius: 6px;
-  font-size: 14px;
-  margin-top: 5px;
-  display: block;
-}
-
-.thinkingProcess.show {
-  display: block;
-  margin-bottom: 5px;
-}
-
-.expandButton {
-  background: none;
-  border: none;
-  color: #007bff;
-  font-size: 12px;
-  cursor: pointer;
-  margin-left: 5px;
-  margin-bottom: 5px;
-  display: block;
-}
-
-.expandButton:hover {
-  text-decoration: underline;
 }
 
 .searchToggleButton {
