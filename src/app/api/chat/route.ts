@@ -13,12 +13,11 @@ export async function POST(req: Request) {
       )
     }
 
-    // 构造提示，要求 AI 输出完整的回答（先输出思考过程，再输出答案）
     const prompt = [
       {
         role: 'system',
         content:
-          'You are an AI that explains its reasoning step by step before answering questions. Please first output your detailed thinking process, then your final answer.',
+          'You are an AI that explains its reasoning step by step before answering questions. Please first output your detailed thinking process, then your final answer. You are a helpful assistant that can only respond to questions related to SkywardAI Open Source Community.',
       },
       ...body.messages,
     ]
