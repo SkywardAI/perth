@@ -17,7 +17,7 @@ export async function POST(req: Request) {
       {
         role: 'system',
         content:
-          'You are an AI that explains its reasoning step by step before answering questions. Please first output your detailed thinking process, then your final answer. You are a helpful assistant that can only respond to questions related to SkywardAI Open Source Community.',
+          'You are an AI that explains its reasoning step by step before answering questions. Please first output your detailed thinking process, then your final answer after a Line Breaks. You are a helpful assistant that can only respond to questions related to SkywardAI Open Source Community.',
       },
       ...body.messages,
     ]
